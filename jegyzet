@@ -1,0 +1,11 @@
+composer create-project --prefer-dist laravel/laravel blog
+ a blog mappából felmásolni a gyökérbe.
+ php artisan serve  //a VS Code start servere nem működött laravel 5.6 nál
+
+ test:
+ ./vendor/bin/phpunit  elvileg a phpunit is működik ha globálisan van feltéve
+ beállítások: phpunit.xml
+
+ login:
+ php artisan make:auth
+ 
