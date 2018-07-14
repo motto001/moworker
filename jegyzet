@@ -7,5 +7,44 @@ composer create-project --prefer-dist laravel/laravel blog
  beállítások: phpunit.xml
 
  login:
- php artisan make:auth
- 
+ php artisan make:auth  //felrakja az auth és a layout mappát és a home bladet 
+ és az users, password resets migrciós fileokat.
+
+az .env ben beááítani az adatbázis elérést adatbázist megcsinálni, illesztés: utf8mb4_unicode_ci	
+ Ha akarunk automatisan usereket meg kell csinálni aseeder fájlt
+ php artisan make:seeder UsersTableSeeder
+ és a DatabaseSeeder.php run() meghívni:  $this->call(UsersTableSeeder::class);
+php artisan migrate
+php artisan db:seed
+php artisan migrate:refresh --seed
+Ha PDOException::("SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too long; max key length is 767 bytes")
+hiba van:
+app/Providers/AppServiceProvider.php 
+use Illuminate\Support\Facades\Schema;
+public function boot()
+{
+    Schema::defaultStringLength(191);
+}
+
+ jogosultságok:
+ composer require appzcoder/laravel-admin //https://github.com/appzcoder/laravel-admin
+ felrakja az aapzcoder/crud-generatort és a laravelcollective/html is
+ adatbázis beállítás a .env fileban
+php artisan laravel-admin:install
+
+php artisan db:seed --class=RolesSeeder
+
+
+--------------------------------------------------------------------------
+
+$array = ['products' => ['desk' => ['price' => 100]]];
+
+$price = array_get($array, 'products.desk.price');
+
+// 100
+
+$array = ['products' => ['desk' => ['price' => 100]]];
+
+$flattened = array_dot($array);
+
+// ['products.desk.price' => 100]

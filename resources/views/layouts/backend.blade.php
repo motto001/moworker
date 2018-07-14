@@ -28,7 +28,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li><a href="{{ url('/admin') }}">Dashboard <span class="sr-only">(current)</span></a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -62,11 +62,37 @@
         </nav>
 
         <main class="py-4">
+            @if (Session::has('flash_message'))
+                <div class="container">
+                    <div class="alert alert-success">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        {{ Session::get('flash_message') }}
+                    </div>
+                </div>
+            @endif
+
             @yield('content')
         </main>
+
+        <hr/>
+
+        <div class="container">
+            &copy; {{ date('Y') }}. Created by <a href="http://www.appzcoder.com">AppzCoder</a>
+            <br/>
+        </div>
+
     </div>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            // Navigation active
+            $('ul.navbar-nav a[href="{{ "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" }}"]').closest('li').addClass('active');
+        });
+    </script>
+
+    @yield('scripts')
 </body>
 </html>
