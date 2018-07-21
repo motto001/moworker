@@ -1,98 +1,169 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
-<head>
+
+ @php
+if(isset($data['param'])){$param=array_merge($param,$data['param']);}   
+//$getT=$param['getT'] ?? [];
+//$modal=$getT['modal'] ?? false;
+//$modal=$param['modal'] ?? $modal;
+$header= $param['header'] ?? true;
+$sidebar = $param['sidebar'] ?? true ;
+$modaltitle=$param['modal']['title'] ?? '' ;
+@endphp
+
+<html lang="en">
+  <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>DASHGUM - FREE Bootstrap Admin Template</title>
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <!--  external css -->
+     <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!--<link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet"> -->
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="/assets/css/style-responsive.css" rel="stylesheet">
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
+    <link href="/assets/css/custom.css" rel="stylesheet" />
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]
+<script src="/assets/js/jquery-1.8.3.min.js"></script>
+-->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  
+  <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
+  <!-- CSRF Token -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+ <script>
+    window.Laravel = <?php echo json_encode([
+        'csrfToken' => csrf_token(),
+    ]); ?>
+</script>
+ 
+ </head>
+
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+
+<section id="container" >
+   <!--header start-->
+        <header class="header black-bg">
+            <div class="sidebar-toggle-box"  >
+                <div style="position:relative;top:-5px;" class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+            @include('layouts.mo_worker_script')       
+            </div>
+
+  <center><span style="position:relative;top:25px;left:-50px;color:white;">Szép napot {{ Auth::user()->name }} !</span></center>
+        
+         <div style="max-width:100px;position:relative;left:-20px; " class="nav navbar-nav navbar-right">
+
+                <a href="{{ url('/logout') }}"
+                    onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                    Kijelentkezés
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                        <li><a href="{{ url('/admin') }}">Dashboard <span class="sr-only">(current)</span></a></li>
-                    </ul>
+                <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
+                                          
+            </div>        
+        
+        </header>
+      <!--header end-->
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li><a class="nav-link" href="{{ url('/login') }}">Login</a></li>
-                            <li><a class="nav-link" href="{{ url('/register') }}">Register</a></li>
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ url('/logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
-
-                                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
+    @if (Session::has('flash_message'))
+            <div class="container">
+                <div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ Session::get('flash_message') }}
                 </div>
             </div>
-        </nav>
+    @endif 
 
-        <main class="py-4">
-            @if (Session::has('flash_message'))
-                <div class="container">
-                    <div class="alert alert-success">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        {{ Session::get('flash_message') }}
-                    </div>
-                </div>
-            @endif
+     @yield('content')
+   
+      <!--main content end-->
+ 
+  </section>
 
-            @yield('content')
-        </main>
+    <!-- js placed at the end of the document so the pages load faster -->
+<script src="/assets/js/jquery.js"></script>
+ 
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script class="include" type="text/javascript" src="/assets/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script src="/assets/js/jquery.scrollTo.min.js"></script>
+    <script src="/assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+    <script src="/assets/js/jquery.sparkline.js"></script>
 
-        <hr/>
 
-        <div class="container">
-            &copy; {{ date('Y') }}. Created by <a href="http://www.appzcoder.com">AppzCoder</a>
-            <br/>
-        </div>
+    <!--common script for all pages-->
+    <script src="/assets/js/common-scripts.js"></script>
+    
+    <script type="text/javascript" src="/assets/js/gritter/js/jquery.gritter.js"></script>
+    <script type="text/javascript" src="/assets/js/gritter-conf.js"></script>
 
-    </div>
+    <!--script for this page-->
+    <script src="/assets/js/sparkline-chart.js"></script>    
+	<script src="/assets/js/zabuto_calendar.js"></script>	
+	  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
+    
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
 
-    <script type="text/javascript">
-        $(function () {
-            // Navigation active
-            $('ul.navbar-nav a[href="{{ "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" }}"]').closest('li').addClass('active');
+
+
+      
+
+	
+    <script type="application/javascript">
+        
+  $( ".datepicker" ).datepicker({
+  dateFormat: "yy-mm-dd"
+});
+$( ".datepickernoyear" ).datepicker({
+  dateFormat: "mm-dd",setDate: "10-10" 
+});
+      
+        $(document).ready(function () {
+            $('.printMe').click(function(){
+                $("#naptar").print();
+           });
         });
+        
     </script>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-header" style="background-color:blue;">
+            <button type="button" style="color:red;background-color:white; opacity: 0.6;" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{{ $modaltitle }}</h4>
+    
+        </div>
+            <div class="modal-content">
+             
+                <div class="modal-body"><div id="myModalContent" class="te"></div></div>
+             
+            </div>    
+            <!-- /.modal-content -->
+             <div class="modal-footer">
+              <!--  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+       
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->  
 
-    @yield('scripts')
-</body>
+  </body>
 </html>
