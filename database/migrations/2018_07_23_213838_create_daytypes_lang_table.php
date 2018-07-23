@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateDaysTable extends Migration
+class CreateDaytypesLangTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +13,13 @@ class CreateDaysTable extends Migration
      */
     public function up()
     {
-        Schema::create('days', function(Blueprint $table) {
+        Schema::create('daytypes_lang', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('daytype_id')->unsigned();
             $table->foreign('daytype_id')->references('id')->on('daytypes');
-            $table->date('datum');
-          //  $table->string('name')->nullable(); //lang
-          //  $table->string('note')->nullable();
+            $table->string('lang')->default('en');
+            $table->string('name');
+            $table->string('note')->nullable();
         });
     }
 
@@ -29,6 +30,6 @@ class CreateDaysTable extends Migration
      */
     public function down()
     {
-        Schema::drop('days');
+        Schema::dropIfExists('daytypes_lang');
     }
 }
