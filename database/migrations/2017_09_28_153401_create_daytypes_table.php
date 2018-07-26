@@ -15,9 +15,9 @@ class CreateDaytypesTable extends Migration
         Schema::create('daytypes', function(Blueprint $table) {
             $table->increments('id');
             //$table->string('name');  //lang
-            $table->decimal('szorzo',4,2)->default(1)->nullable();
-            $table->integer('fixplusz')->default(0)->nullable();
-          //  $table->string('color')->nullable();
+            $table->decimal('szorzo',4,2)->default(1);
+            $table->integer('fixplusz')->default(0);
+          $table->boolean('workday')->default(0);
          //   $table->string('note')->nullable();
          
         });

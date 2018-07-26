@@ -18,14 +18,12 @@ class CreateWorkersTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-          //  $table->integer('worker_wrole_id')->unsigned();
-         //   $table->foreign('worker_wrole_id')->references('id')->on('worker_wroles');
             $table->integer('status_id')->unsigned();
-            $table->foreign('status_id')->references('id')->on('statuses');
+         //   $table->foreign('status_id')->references('id')->on('statuses');
             $table->integer('workertype_id')->unsigned();
-            $table->foreign('workertype_id')->references('id')->on('workertypes');
+        //    $table->foreign('workertype_id')->references('id')->on('workertypes');
             $table->integer('group_id')->unsigned();
-            $table->foreign('group_id')->references('id')->on('workergroups');
+         //   $table->foreign('group_id')->references('id')->on('workergroups');
             $table->integer('salary');
             $table->string('salary_type');
             $table->string('position');

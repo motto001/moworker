@@ -26,12 +26,12 @@ class TimetypesSeeder extends Seeder
             DB::table('timetypes_lang')->insert([
                 'timetype_id' => $timetype[0],
                 'lang' => 'hu',
-                'name' => $timetype[2],
+                'name' => $timetype[1],
             ]);
             DB::table('timetypes_lang')->insert([
                 'timetype_id' => $timetype[0],
                 'lang' => 'en',
-                'name' => $timetype[3],
+                'name' => $timetype[2],
             ]);
         };
     }

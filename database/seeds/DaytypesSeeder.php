@@ -20,21 +20,21 @@ class DaytypesSeeder extends Seeder
         ];
       
         foreach ($daytypes as $daytype) {
-            DB::table('daytypes')->insert([
+          $id=  DB::table('daytypes')->insertGetId([
                 'id' => $daytype[0],
                 'szorzo' => $daytype[3],
                 'fixplusz' => $daytype[4],
                 'workday' => $daytype[5],
             ]);
             DB::table('daytypes_lang')->insert([
-                'daytype_id' => $daytype[0],
+                'daytype_id' => $id,
                 'lang' => 'hu',
-                'name' => $daytype[2],
+                'name' => $daytype[1],
             ]);
             DB::table('daytypes_lang')->insert([
-                'daytype_id' => $daytype[0],
+                'daytype_id' => $id,
                 'lang' => 'en',
-                'name' => $daytype[3],
+                'name' => $daytype[2],
             ]);
         };
     }

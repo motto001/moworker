@@ -14,7 +14,8 @@ class CreateDaysTable extends Migration
     {
         Schema::create('days', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('daytype_id')->unsigned();
+            $table->integer('daytype_id')
+            ->unsigned();
             $table->foreign('daytype_id')->references('id')->on('daytypes');
             $table->date('datum');
           //  $table->string('name')->nullable(); //lang
