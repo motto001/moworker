@@ -3,10 +3,14 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+//use  PHPUnit\Framework\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
+use Tests\CreatesApplication;
+use Illuminate\Support\Facades\DB;
+use App\Worker;
 class ExampleTest extends TestCase
 {
+    use CreatesApplication;
     /**
      * A basic test example.
      *
@@ -14,6 +18,15 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
-        $this->assertTrue(true);
-    }
-}
+        //\DB::connection('mysql')->table('workers')->insert([
+     $this->memoryDB(); 
+  //  $this->migrationIfMemoryDB();   
+        \DB::table('workers')->insert([
+            'id' => 14,
+            'user_id' => 4,
+            'fullname' => 'jjjpppppppppppppppppppppppppppppl',          
+        ]);
+       // Worker::findOrFail(1);
+        $this->assertTrue(Worker::findOrFail(14)->id==14);
+    }}
+

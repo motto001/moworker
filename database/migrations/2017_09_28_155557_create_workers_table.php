@@ -5,8 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Eloquent\SoftDeletes;
 class CreateWorkersTable extends Migration
 {
-    use SoftDeletes;
-    protected $dates = ['deleted_at'];
+   // use SoftDeletes;
+  //  protected $dates = ['deleted_at'];
     /**
      * Run the migrations.
      *
@@ -14,30 +14,15 @@ class CreateWorkersTable extends Migration
      */
     public function up()
     {
+        /**
+         *  Not complet in demo
+         */
         Schema::create('workers', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('status_id')->unsigned();
-         //   $table->foreign('status_id')->references('id')->on('statuses');
-            $table->integer('workertype_id')->unsigned();
-        //    $table->foreign('workertype_id')->references('id')->on('workertypes');
-            $table->integer('group_id')->unsigned();
-         //   $table->foreign('group_id')->references('id')->on('workergroups');
-            $table->integer('salary');
-            $table->string('salary_type');
-            $table->string('position');
-            $table->string('foto')->nullable();
             $table->string('fullname');
-            $table->string('cim');
-            $table->string('tel')->nullable();
-            $table->date('birth');
-            $table->string('ado')->nullable();
-            $table->string('tb')->nullable();
-            $table->date('start');
-            $table->date('end')->nullable();
-            $table->string('note')->nullable();
-            $table->integer('pub');       
+            $table->integer('pub')->default(0);       
             $table->timestamps();
 
         });
@@ -50,6 +35,9 @@ class CreateWorkersTable extends Migration
      */
     public function down()
     {
+        Schema::table('workers', function(Blueprint $table){
+            $table->dropForeign(['user_id']);   
+        });
         Schema::drop('workers');
     }
 }

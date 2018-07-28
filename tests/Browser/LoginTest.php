@@ -37,7 +37,7 @@ class LoginTest extends DuskTestCase
             */
            // $response = $this->call('GET', '/login');
             $browser->visit('/login')
-                    ->type('email', 'worker@dolgozo.com')
+                    ->type('email', 'user@dolgozo.com')
                     ->type('password', 'aaaaaa2')
                     ->press('Login')
                     ->assertPathIs('/login');

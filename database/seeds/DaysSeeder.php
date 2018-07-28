@@ -12,12 +12,12 @@ class DaysSeeder extends Seeder
     public function run()
     {
         for ($i = 1; $i < 13; $i++) {
-            $i2 = $i; $i3= $i+1;
-            if ($i2 < 10) {$i2 = '0' . $i;}
-            if ($i3< 10) {$i3= '0' . $i3;}
+            $basenap_ho = $i; $akt_ev_nap= $i+1;
+            if ($basenap_ho < 10) {$basenap_ho = '0' . $basenap_ho;}
+            if ($akt_ev_nap< 10) {$akt_ev_nap= '0' . $akt_ev_nap;}
         $id = DB::table('days')->insertGetId([
                 'daytype_id' => 4,
-                'datum' => '0000-' . $i . '-' . $i2,
+                'datum' => '0000-' . $basenap_ho. '-' . $basenap_ho,
             ]);
 
             DB::table('days_lang')->insert([
@@ -36,7 +36,7 @@ class DaysSeeder extends Seeder
 
         $id2 = DB::table('days')->insertGetId([
                 'daytype_id' => 4,
-                'datum' => '2018-' . $i . '-' . $i3,
+                'datum' => '2018-' . $basenap_ho . '-' . $akt_ev_nap,
             ]);
 
             DB::table('days_lang')->insert([

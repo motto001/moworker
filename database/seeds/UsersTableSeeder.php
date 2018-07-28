@@ -12,18 +12,19 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $users = [
-            ['root', 'root@dolgozo.com'],
-            ['manager', 'manager@dolgozo.com'],
-            ['workadmin', 'workadmin@dolgozo.com'],
-            ['workadmin2', 'workadmin2@dolgozo.com'],
-            ['worker', 'worker@dolgozo.com'],
-            ['worker2', 'worker2@dolgozo.com'],
-            ['worker3', 'worker3@dolgozo.com']
+            [1,'root', 'root@dolgozo.com'],
+            [2,'manager', 'manager@dolgozo.com'],
+            [3,'workadmin', 'workadmin@dolgozo.com'],
+            [4,'workadmin2', 'workadmin2@dolgozo.com'],
+            [5,'user', 'user@dolgozo.com'],
+            [6,'user2', 'user2@dolgozo.com'],
+            [7,'noworker user', 'noworker.user@dolgozo.com']
         ];
         foreach ($users as $user) {
             DB::table('users')->insert([
-                'name' => $user[0],
-                'email' => $user[1],
+                'id' => $user[0],
+                'name' => $user[1],
+                'email' => $user[2],
                 'password' => bcrypt('aaaaaa'),
             ]);
         }

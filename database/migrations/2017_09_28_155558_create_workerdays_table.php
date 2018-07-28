@@ -19,11 +19,23 @@ class CreateWorkerdaysTable extends Migration
             $table->integer('daytype_id')->unsigned();
             $table->foreign('daytype_id')->references('id')->on('daytypes');
             $table->date('datum');
-            $table->string('managernote')->nullable();
-            $table->string('workernote')->nullable();
+        //if havent lang table-------------
+            // $table->string('managernote')->nullable();
+            // $table->string('workernote')->nullable();
             $table->timestamps();
             $table->integer('pub');
         });
+        //multilanguge (If need) ----------
+        Schema::create('workerdays_lang', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('workerday_id')->unsigned();
+            $table->foreign('workerday_id')->references('id')->on('workerdays');
+            $table->string('lang')->default('en');
+            $table->string('managernote')->nullable();
+            $table->string('workernote')->nullable();
+            $table->timestamps();
+        });
+
     }
 
     /**
@@ -32,7 +44,11 @@ class CreateWorkerdaysTable extends Migration
      * @return void
      */
     public function down()
-    {
+    { 
+        Schema::table('workerdays_lang', function(Blueprint $table){
+        $table->dropForeign(['workerday_id']);   
+    });
         Schema::drop('workerdays');
+        Schema::drop('workerdays_lang');
     }
 }

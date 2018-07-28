@@ -21,10 +21,22 @@ class CreateWorkertimesTable extends Migration
             $table->time('start');
             $table->time('end')->nullable();
             $table->integer('hour');
+        //if havent lang table-------------
+            // $table->string('managernote')->nullable();
+            //$table->string('workernote')->nullable();
+            $table->timestamps();
+        });
+        //multilanguge (If need) ----------
+        Schema::create('workertimes_lang', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('workertime_id')->unsigned();
+            $table->foreign('workertime_id')->references('id')->on('workertimes');
+            $table->string('lang')->default('en');
             $table->string('managernote')->nullable();
             $table->string('workernote')->nullable();
             $table->timestamps();
         });
+
     }
 
     /**
@@ -34,6 +46,10 @@ class CreateWorkertimesTable extends Migration
      */
     public function down()
     {
+        Schema::table('workertimes_lang', function(Blueprint $table){
+            $table->dropForeign(['workertime_id']);   
+        });
         Schema::drop('workertimes');
+        Schema::drop('workertimes_lang');
     }
 }

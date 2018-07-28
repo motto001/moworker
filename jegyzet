@@ -25,6 +25,9 @@ php artisan key:generate //az autentikációhoz kell
 php artisan migrate
 php artisan db:seed
 php artisan migrate:refresh --seed
+A migrattion fájloknak nem mindegy a nevük! A migrációs script abc sorrendben hívja meg (ez álltalában elkészítése sorrend is az elején lévő dátum éls sorszám miatt)
+Ha olan táblát próbál elkészíteni aminek az idegen kulcsa egy nemlétező táblára mutat 
+150 "Foreign key constraint is incorrectly formed" hibával leáll.
 Ha PDOException::("SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too long; max key length is 767 bytes")
 hiba van:
 app/Providers/AppServiceProvider.php 
