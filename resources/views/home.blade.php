@@ -1,5 +1,7 @@
-@extends('layouts.app')
-
+@extends('app')
+<!-- login bejelentkezés után ezt használja-->
+<!--template:base '' -->
+<!--name:home-->
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

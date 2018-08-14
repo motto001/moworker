@@ -14,7 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::any('test/viewM', 'ControllerM@ViewM');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

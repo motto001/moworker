@@ -18,9 +18,8 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
-        //\DB::connection('mysql')->table('workers')->insert([
      $this->memoryDB(); 
-  //  $this->migrationIfMemoryDB();   
+     
         \DB::table('workers')->insert([
             'id' => 14,
             'user_id' => 4,

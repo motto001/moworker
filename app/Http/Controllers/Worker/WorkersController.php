@@ -16,8 +16,6 @@ use App\Workergroup;
 class WorkersController extends Controller
 {
 
-    use  \App\Handler\trt\Show;
-
 
     protected $par= [
         // 'baseroute'=>'manager/wroletimes', // a routes-be kerüt (base)
@@ -42,12 +40,28 @@ class WorkersController extends Controller
 
 
 
-public function index()
+public function index(Request $request)
     {
         $userid=\Auth::id();
         //echo 
         $data=Worker::where('user_id','=',$userid)->first()->toarray();
-       // print_r($data);
+        $data=[];  
+        $keyword = $request->get('search');
+        $perPage = 25;
+        $search_columnT=$this->BASE['search_column'] ?? [];
+
+        $ob=$this->BASE['ob']['base'] ?? $this->BASE['ob'];
+       // $ob= new $this->BASE['obname']();
+        if (!empty($keyword)) {
+            $ob = $ob->where('id', '<', "1");
+            foreach($search_columnT as $col)
+            {
+                $ob=$ob->orwhere('name', 'LIKE', "%$keyword%");
+            }
+			$data['list']=$ob->paginate($perPage);
+        } else {
+            $data['list'] = $ob->paginate($perPage);
+        }
         $param=$this->par;
         return view($this->par['view'], compact('data','param')); 
     }

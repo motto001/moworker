@@ -1,4 +1,4 @@
-@extends('laravel_base.app')
+@extends('Bootstrap3.dashgum.app')
 
 @section('content')
 <div class="container">
