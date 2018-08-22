@@ -14,7 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::any('test/viewM', 'ControllerM@ViewM');
+Route::resource('test/res', 'ControllerM');
+Route::any('test/viewjson', 'ControllerM@ViewJson');
+\Route::any('test/taskChange/{task}', 'ControllerM@taskChange');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

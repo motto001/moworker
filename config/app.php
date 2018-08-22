@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-    'template' => env('Template', 'Bootstrap3.dashgum'),
+   // 'template' => env('Template', 'Bootstrap3.dashgum'),
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
