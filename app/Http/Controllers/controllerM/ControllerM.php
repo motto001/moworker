@@ -11,6 +11,7 @@ class ControllerM extends Controller
 {
 /**
  * A view-el megosztott ,kívülről elérhetőparaméterek
+ * Kulcsok a viewtaskok nevei. A base alapbeállítás. Az actual kulcsot alapesetben a construktor hozza létre, a setTask(Route $route)-al
  */
     public $PAR = [
         'base' =>
@@ -30,7 +31,9 @@ class ControllerM extends Controller
         ],
     ];
 /**
- * A controller által használt paraméterek
+ * A controller által használt paraméterek. 
+ * Kulcsok a taskok nevei.A base alapbeállítás. Az actual kulcsot alapesetben a construktor hozza létre, a setTask(Route $route)-al
+ * Az actual kulcs tartalmazza az aktuális task protected beaállításait.  
  */
     protected $BASE = [
         // 'search_column'=>'daytype_id,datum,managernote,usernote',
@@ -58,26 +61,23 @@ class ControllerM extends Controller
 
     /**
      * Routot ráírányítva a paraméterben megadott függvényt hívja meg Hogy ne kelljen minden függvényhez routot csinálni
+     * és hogy pl. a destroy meghívható legyen GET-el
      *  @return void
      */
-    public function taskRun($task){
-        
+    public function taskRun($task,$id=0){
+       //ha  general true legeberálja az adott taskot a BASE.actual.funtions alapján  a jelenlévő trait-ekből
         $general=$this->BASE['actual']['make'] ?? false;
         if( $general){
             $taskFunc = $this->PAR['base']['actualTask'] ; 
-            $this->$taskFunc();
+           if($id==0) {$this->$taskFunc();}else{ $this->PAR['actual']['id'] =$id; $this->$taskFunc($id); }
          }
         else{$this->taskMake();}  
     }
+   /**
+    *  Az ID-s generálandó routokat ide kell irányítani
+    */
     public function taskRunWithId($task,$id){
-
-        $this->PAR['actual']['id'] =$id;
-        $general=$this->BASE['actual']['make'] ?? false;
-        if( $general){
-             $taskFunc = $this->PAR['base']['actualTask'] ;
-            $this->$taskFunc($id); 
-        }
-       else{$this->taskMake();}  
+       $this->taskRun($task,$id);
     }
    
     public function taskMake($task){
@@ -86,7 +86,7 @@ class ControllerM extends Controller
        
         foreach ($this->BASE['actual']['functions'] as $funtions)
         { 
-            $params= $this->paramkMake($localParams,$functionParams);
+            $params= $this->paramMake($localParams,$functionParams);
             $function=$funtions[2];
             $key=$funtions[1];
 
@@ -108,34 +108,40 @@ class ControllerM extends Controller
                     break;  
                 case 'return':
                 return  $this->$function($params);
-                    break;         
+                    break;  
+                default;
+                $this->log(['controllerM.taskMake','PROPETY_NOT_ALLOWED','property not allowed:'. $funtions[0]]); 
+                break;           
             }
 
         }
     }
 
-    public function paramkMake($localParams,$functionParams){
+    public function paramMake($localParams,$functionParams){
         $params=[];
        
-        foreach ($$functionParams as $key=>$pars)
+        foreach ($functionParams as $key=>$pars)
         {
             
             switch ($pars[0]) {
                 case 'BASE':
-                $params[$key]=getBase($pars[1]);
+                $params[$key]=$this->getBase($pars[1]);
                     break;
                 case 'PAR':
-                $params[$key]=getPar($pars[1]);
+                $params[$key]=$this->getPar($pars[1]);
                     break;
                 case 'DATA':
-                $params[$key]=getData($pars[1]);
+                $params[$key]=$this->getData($pars[1]);
                     break;
                 case 'local':
                 $params[$key]=$localParams[$pars[1]];
                     break;  
                 case 'str':
                     $params[$key]=$pars[1];
-                     break;       
+                     break;    
+                default;
+                    $this->log(['controllerM.paramMake','PROPETY_NOT_ALLOWED','property not allowed:'.$pars[0]]); 
+                    break;          
             }
 
         }
@@ -152,16 +158,17 @@ class ControllerM extends Controller
         $task = $route->getActionMethod();
        if ($task == 'taskRun') {$task = $route->parameter('task');}
       
-        $allowedtask=$this->BASE['base']['allowedTask'] ?? config('controllerm.BASE.base.allowedTask') ?? [];
-        $basetask=$this->PAR['base']['baseTask'] ?? config('controllerm.BASE.base.baseTask') ?? 'index'; 
+        $allowedtask=$this->BASE['actual']['allowedTask'] ?? config('controllerm.BASE.base.allowedTask') ?? [];
+        $basetask=$this->BASE['actual']['baseTask'] ?? config('controllerm.BASE.base.baseTask') ?? 'index'; 
+        $hibatask=$this->BASE['actual']['errorTask'] ?? $basetask;
         if(!in_array($task,$allowedtask)){
-            $this->logM(['controllerM.taskChange','function not allowe:'. $task]); 
-             $task= $basetask ;        
+            $this->log(['controllerM.taskChange','FUNC_NOT_ALLOWED','function not allowe:'. $task]); 
+             $task= $hibatask;        
          }
       
          if(!method_exists($this, $task)){
-            $this->logM(['controllerM.taskChange','function not exist:'. $task]); 
-             $task=$basetask;           
+            $this->log(['controllerM.taskChange','FUNC_NOT_EXIST','function not exist:'. $task]); 
+             $task=$hibatask;           
          }
         $this->PAR['base']['actualTask'] = $task;
         $this->PAR['base']['viewTask'] = $this->BASE['base'][$task]['viewTask']  ?? $this->PAR['base']['viewTask'] ?? $task;
@@ -169,12 +176,12 @@ class ControllerM extends Controller
     }
   /**
      * _construktor() hívja meg a settask után
-     * A setActualArr funkciónak be kell állítania A PAR és a BASE propertik actual kulcsú tümbjét
+     * A setActualS funkciónak be kell állítania A PAR és a BASE propertik actual kulcsú tümbjét
      *A BASE.base  tömböt egyesíti a Base.$task  ($task=PAR.base.actualTask) tömbel a BASE.actual tömbbe
      *A PAR.base  tömböt egyesíti a PAR.$viewtask  ($viewtask=PAR.base.actualViewTask) tömbel a PAR.actual tömbbe
      * @return void
      */
-    public function setActualArr()
+    public function setActualS()
     {
         $task = $this->PAR['base']['actualtask'];
         $baseConf=config('controllerm.BASE') ?? [];
@@ -226,7 +233,7 @@ class ControllerM extends Controller
     }
 
     //handlerek--------------------------------------------------
-         public function logM($errT){}
+         public function log($errT){}
     //getteek setterek-----------------------------------------
         public function setDot($dotkeyArr, $propName)
         {

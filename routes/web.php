@@ -14,8 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
 Route::resource('test/res', 'ControllerM');
-Route::any('test/viewjson', 'ControllerM@ViewJson');
+Route::any('test/viewjson', 'ControllerM\\ControllerM@ViewJson');
+Route::any('testdir', '\\Tests\\Unit\\Controllerm\\CrudTestController@ViewJson');
+
 \Route::any('test/taskChange/{task}', 'ControllerM@taskChange');
 Auth::routes();
 
